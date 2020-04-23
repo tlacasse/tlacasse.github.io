@@ -23,3 +23,5 @@ Root.wait = function () {
 Root.reenable = function () {
     get('wall').style.display = 'none';
 }
+
+////////////////////////////////////////////////////////////////

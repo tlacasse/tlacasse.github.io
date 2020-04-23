@@ -21,7 +21,8 @@ def main():
             ]
     
     styles = [
-              'main.css'
+              'art.css'
+            , 'main.css'
             , 'vars.css'
             ]
     styles = ['../build/css/' + x for x in styles]
@@ -55,10 +56,18 @@ def injecthtml(append):
 <html>
 <head>
     <title>Thomas Lacasse</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="build/framework/css/reset.css">
+    <link rel="stylesheet" href="build/framework/css/reveal.css">
+    <link rel="stylesheet" href="build/framework/css/theme/black.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="build/framework/lib/css/monokai.css">
     <link rel="stylesheet" href="build/style_APPEND.css" />
 </head>
 <body>
-    <div id="page"></div>
+    <div id="page" class="reveal"></div>
     <div id="wall" style="display:none;"></div>
     <script src="build/framework/plotly-v1.53.0.min.js"></script>
     <script src="build/framework/reveal-v3.9.2.js"></script>
