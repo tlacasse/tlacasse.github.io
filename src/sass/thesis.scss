@@ -1,0 +1,52 @@
+﻿@import "vars";
+
+#thesis-tsne-container-2d, #thesis-tsne-container-3d {
+    width: 50vw;
+    height: 70vh;
+    margin: auto;
+    text-align: center;
+}
+
+.codeblock, .codeline {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 80%;
+    text-align: left;
+}
+
+.codeblock {
+    border: 2px solid #808080;
+    padding: 0.2em;
+}
+
+.codeline {
+    .codenorm {
+    }
+
+    .codebold {
+        font-weight: bold;
+    }
+
+    .codeit {
+        font-style: italic;
+    }
+
+    .codegreen {
+        color: #96ff94;
+    }
+
+    .codeblue {
+        color: #4a7cfe;
+    }
+
+    .codeorange {
+        color: #dfc06c;
+    }
+
+    .codelite {
+        color: #808080;
+    }
+}
+
+.emphasis {
+    color: #ffce00;
+}

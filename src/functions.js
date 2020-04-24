@@ -35,17 +35,17 @@ var API = {};
 
 API._get = function (url, success, block) {
     if (block) {
-        App.wait();
+        Root.wait();
     }
     m.request({
         method: 'GET',
         dataType: 'jsonp',
         url: url,
     }).then(function (data) {
-        App.reenable();
+        Root.reenable();
         success(data);
     }).catch(function (e) {
-        App.reenable();
+        Root.reenable();
     });
 }
 

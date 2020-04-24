@@ -6,6 +6,7 @@ m.route.prefix = '?';
 m.route(root, '/home', {
     '/home': Home,
     '/art': Art,
+    '/thesis': Thesis,
 });
 
 var Root = {};
