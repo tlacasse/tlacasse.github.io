@@ -17,13 +17,14 @@ def main():
               'functions.js'
             , 'views/art.js'
             , 'views/home.js'
+            , 'views/thesis.js'
             , 'root.js'
             ]
     
     styles = [
-              'art.css'
-            , 'main.css'
-            , 'vars.css'
+              'main.css'
+            , 'art.css'
+            , 'thesis.css'
             ]
     styles = ['../build/css/' + x for x in styles]
 
