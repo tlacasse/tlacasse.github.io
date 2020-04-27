@@ -15,7 +15,7 @@ function get(id) {
 function nbsps(n) {
     var result = '';
     for (var i = 0; i < n; i++) {
-        result += '\u00A0'
+        result += '\u00A0';
     }
     return result;
 }
