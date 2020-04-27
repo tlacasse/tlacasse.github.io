@@ -95,7 +95,10 @@ Thesis.slides = function () {
                 m('li', 'Data'),
                 m('li', 'Inspiration'),
                 m('li', 'My Proposed Idea'),
-                m('li', 'Etc'),
+                m('li', 'Example'),
+                m('li', 'Conclusion'),
+                m('li', 'Bonus'),
+                m('li', 'References'),
             ]),
         ]),
         m('section',
@@ -143,7 +146,7 @@ Thesis.slides = function () {
                     m('sub', '1'),
                     span('p'), m('sub', '2'),
                     span('...p'), m('sub', 'n'),
-                    span(' = 1. Thus q is another prime not found in the set of all primes. This contradicts our assumption that there are finitely many primes.'),
+                    span(' = 1. Thus q is another prime not found in the assumed set of all primes. This is a contradiction, so the set of all primes must be infinite.'),
                 ]),
             ]),
             m('section', [
@@ -222,7 +225,7 @@ Thesis.slides = function () {
                     span(' (ATP) attempts to prove theorems entirely automatically. This is our method of interest here.'),
                 ]),
                 m('br'),
-                m('p', 'The formalized proof librarys of ITP systems may supply the data for ATP methods.'),
+                m('p', 'The formalized proof libraries of ITP systems may supply the data for ATP methods.'),
             ]),
             m('section', [
                 m('p', 'Machine Learning has recently been applied to ATP to approximate functions of this difficult proof data.'),
@@ -262,7 +265,7 @@ Thesis.slides = function () {
                 m('p', 'This significantly reduces the search space. Then the actual proof may be constructed by filling in the gaps.'),
             ]),
             m('section', [
-                m('p', 'In practice, a premise selection model takes in an input of a conjecture representation and a premise representation, and the output is a number between 0 and 1, where 1 is useful and 0 is not useful. Multiple premises are evaluated with a single conjectures, and the premises are ranked to determine which are most useful.')
+                m('p', 'In practice, a premise selection model takes in an input of a conjecture representation and a premise representation, and the output is a number between 0 and 1, where 1 is useful and 0 is not useful. Multiple premises are evaluated with a single conjecture, and the premises are ranked to determine which are most useful.')
             ]),
             m('section', [
                 m('p', 'A couple points:'),
@@ -333,7 +336,7 @@ Thesis.slides = function () {
             ]),
         ]),
         m('section', [
-            m('p', 'Only Holstep was used for my work, for a couple main reasons: '),
+            m('p', 'Only Holstep was used for the rest of the work, for a couple main reasons: '),
             m('ul', [
                 m('li', 'The designed nature of the dataset has clearly defined units of information: the conjectures and the premises (along with their usefulness).'),
                 m('li', 'The language is more clearly structured, and is easier to parse.')
@@ -367,6 +370,8 @@ Thesis.slides = function () {
                     span('" on MNIST handwritten digits data:'),
                 ]),
                 m('img', { src: 'build/img/thesis/vae_mnist.png', style: 'height:60vh;' }),
+                m('br', { style: 'font-size: 0.4em' }),
+                m('smaller', { style: 'font-size: 0.4em' }, 'Image from reference [4] at the end.'),
             ]),
             m('section', [
                 m('p', 'Notice how we see small changes between digits, and see the position of digits in space in relation to the others.'),
@@ -418,18 +423,209 @@ Thesis.slides = function () {
                     span('We normally consider proofs as discrete and separate. We do not normally consider a proof with a slight change. But considering the small changes may allow us understand when specific premises may become useful.'),
                 ]),
             ]),
+            m('section', [
+                span('While the space is intended to be continuous, it is interesting to determine if there are informal "'),
+                m('span.emphasis', 'discontinuities'),
+                span('". These may emerge as boundaries in the premise-conjecture space, where there are sharp changes in the generated conjecture, creating distinct clusters of proofs.')
+            ]),
             m('section', 'We may then use what we have learned from the exploration to develop better predictive models.'),
-            m('section', 'Also, generative modeling may serve as an alternative to autoformalization.')
+            m('section', 'Also, generative modeling may serve as an alternative to autoformalization.'),
+            m('section', 'Finally, more work on visualization on proof content may provide better visuals for presentations like these.')
         ]),
-        m('section', 'A full implementation is out-of-scope for this project, but I hope to have working visualization that we may explore in the future.'),
-
-
-        // a few goals/advantages
-        //m('section', [
-        //    m('section', m('div', { id: 'thesis-tsne-container-2d' })),
-        //    m('section', m('div', { id: 'thesis-tsne-container-3d' })),
-        //]),
-        m('section', 'TODO MODEL'),
+        m('section', 'A full implementation is out-of-scope for this project, but I hope to have a working visualization that we may explore in the future.'),
+        m('section', [
+            m('p', 'The model has premises as input and conjectures as output, and learns a internal state that is the continuous premise-conjecture space.'),
+            m('br'),
+            m('p.fragment', 'A brief and simple description of the model is in the following slides. The paper explains in more detail.'),
+        ]),
+        m('section', [
+            span('The model follows the variational autoencoder architecture. The premises are encoded into a probability distribution called the '),
+            m('span.emphasis', 'latent space'),
+            span(' and points in the space then generate the conjectures.'),
+        ]),
+        m('section', [
+            m('p', [
+                span('The model is named '),
+                m('span.emphasis', 'PC-Space'),
+                span(' for convenience. It is divided into two separate models:'),
+            ]),
+            m('ol', [
+                m('li', 'PC-Space-A, an intermediate deliverable model, and'),
+                m('li', 'PC-Space-B, a final model.')
+            ]),
+        ]),
+        m('section', [
+            m('section', 'PC-Space-A outputs just a list of probabilities of each token being in the conjecture.'),
+            m('section', [
+                m('p', 'For example: The training data for the previous Holstep example: '),
+                m('div.codeblock', [
+                    m('div.codeline', 'N Ssrnat.subSS'),
+                    m('div.codeline', 'C |- (!n. (!m. (((SUC m) - (SUC n)) = (m - n))))'),
+                ]),
+                m('p', 'is the set of tokens:'),
+                m('div.codeblock', [
+                    m('div.codeline', '{ |-, !, n, ., m, SUC, -, =}'),
+                ]),
+            ]),
+            m('section', [
+                m('p', 'Multiplicity of tokens is ignored, as well as parentheses, as they influence the structure not the content of the conjecture.'),
+                m('br'),
+                m('p.fragment', 'The output of PC-Space-A creates a list of tokens, with probabilities of being included in the generated conjecture, to give a general, unstructured idea of what conjecture could be generated.'),
+            ]),
+            m('section', 'Now, the input is both the representation of premises themselves and the collection of premises.'),
+            m('section', [
+                m('p', 'Each premise is parsed into a binary tree structure.'),
+                m('br'),
+                m('p', [
+                    span('Variables are encoded into a generic '),
+                    m('span.emphasis', 'VAR'),
+                    span(' token, so the encoding is independent of the variable naming.')
+                ]),
+            ]),
+            m('section', [
+                m('p', 'For example: The premise'),
+                m('div.codeblock', [
+                    m('div.codeline', '|- ((m = n) = ((int_of_num m) = (int_of_num n)))'),
+                ]),
+                m('p', 'is parsed into the binary tree:'),
+                m('div.codeblock', [
+                    m('div.codeline', [cc('|-')]),
+                    m('div.codeline', [cclite('|'), cclite('-'), sp, cc('=')]),
+                    m('div.codeline', [sp, sp, sp, cclite('|'), cclite('-'), sp, cc('=')]),
+                    m('div.codeline', [sp, sp, sp, cclite('|'), sp, sp, cclite('|'), cclite('-'), sp, cc('VAR')]),
+                    m('div.codeline', [sp, sp, sp, cclite('|'), sp, sp, cclite('|'), cclite('-'), sp, cc('VAR')]),
+                    m('div.codeline', [sp, sp, sp, cclite('|'), cclite('-'), sp, cc('=')]),
+                    m('div.codeline', [sp, sp, sp, sp, sp, sp, cclite('|'), cclite('-'), sp, cc('int_of_num')]),
+                    m('div.codeline', [sp, sp, sp, sp, sp, sp, cclite('|'), sp, sp, cclite('|'), cclite('-'), sp, cc('VAR')]),
+                    m('div.codeline', [sp, sp, sp, sp, sp, sp, cclite('|'), cclite('-'), sp, cc('int_of_num')]),
+                    m('div.codeline', [sp, sp, sp, sp, sp, sp, sp, sp, sp, cclite('|'), cclite('-'), sp, cc('VAR')]),
+                ]),
+            ]),
+            m('section', [
+                m('p', 'The premises are encoding recursively buttom-up.'),
+                m('br'),
+                m('p', 'Leaf tokens have a initial arbitrary encoding, then subtrees with tokens that are one level above the leaves, then subtrees with a depth of 3, and so on.'),
+                m('p', 'Encodings are determined by passing the subtrees through the model to the desired conjecture, and then evaluating each subtree encoding based on its child node encodings, thus allowing larger trees in the next iteration.'),
+            ]),
+            m('section', [
+                m('p', 'Since one conjecture has many useful premises, multiple premises are sent through the model to a single conjecture.'),
+                m('table', [
+                    m('tr', [m('td', 'Premise 1'), m('td', '\u21E8'), m('td', 'Conjecture 1')]),
+                    m('tr', [m('td', 'Premise 2'), m('td', '\u21E8'), m('td', 'Conjecture 1')]),
+                    m('tr', [m('td', '...'), m('td', '\u21E8'), m('td', 'Conjecture 1')]),
+                    m('tr', [m('td', 'Premise 1'), m('td', '\u21E8'), m('td', 'Conjecture 2')]),
+                    m('tr', [m('td', '...'), m('td', '...'), m('td', '...')]),
+                    m('tr', [m('td', 'Premise i'), m('td', '\u21E8'), m('td', 'Conjecture j')]),
+                ]),
+            ]),
+        ]),
+        m('section', [
+            m('p', 'PC-Space-B outputs the entire structured conjecture. The expansion from PC-Space-A is relatively straightforward.'),
+            m('br'),
+            m('p', 'Encoding of premises remains unchanged.'),
+            m('br'),
+            m('p', 'The conjecture is then generated recursively into a binary tree.')
+        ]),
+        m('section', 'Example'),
+        m('section', 'While we do not have an actual visualization system to explore, we can consider an example of how to analyze the continuous premise-conjecture space.'),
+        m('section', 'A similar topic of research is the paper "Generating Sentences from a Continuous Space" by S. R. Bowman, L. Vilnis, O. Vinyals, A. M. Dai, R. Jozefowicz, and S. Bengio [16].'),
+        m('section', [
+            m('section', [
+                m('p', 'Consider this example from their paper:'),
+                m('div.codeblock', [
+                    m('div.codeline', ccbold('he was silent for a long moment.')),
+                    m('div.codeline', cc('he was silent for a moment.')),
+                    m('div.codeline', cc('it was quiet for a moment.')),
+                    m('div.codeline', cc('it was dark and cold.')),
+                    m('div.codeline', cc('there was a pause.')),
+                    m('div.codeline', ccbold('it was my turn.')),
+                ]),
+            ]),
+            m('section', [
+                m('p', [
+                    span('Given two sentences, we have a series of inbetween steps to form the first sentence into a second sentence. This can be called a '),
+                    m('span.emphasis', 'homotopy'),
+                    span('.'),
+                ]),
+                m('br'),
+                m('p', 'The adjacent steps (small changes in the input), cause the sentences to be slightly difference (small changes in the output), so here we have a piece of a continuous space. Also, the intermediate steps are cohesive sentences, not just combinations of the words of the endpoints.')
+            ]),
+            m('section', [
+                m('p', 'Now try to imagine an analogy between this sentence example and some visualization using PC-Space.'),
+                m('br'),
+                m('p', 'What if there was some meaningful hidden information behind the generated sentences?'),
+            ]),
+            m('section', [
+                m('p', 'If we take the endpoints to be the previously mentioned theorems:'),
+                m('div.codeblock', [
+                    m('div.codeline', ccbold('he was silent for a long moment. (infinitely many primes)')),
+                    m('div.codeline', cc('he was silent for a moment.')),
+                    m('div.codeline', cc('it was quiet for a moment.')),
+                    m('div.codeline', cc('it was dark and cold.')),
+                    m('div.codeline', cc('there was a pause.')),
+                    m('div.codeline', ccbold('it was my turn. (square root of 2 is irrational)')),
+                ]),
+            ]),
+            m('section', [
+                m('p', 'It may be useful to suppose the theorems are a bit more complicated in their proofs, as proofs generally are.'),
+                m('br'),
+                m('p', 'Each theorem has an associated set of premises, and it may be clear to see why the associated premises are useful.'),
+                m('br'),
+                m('p', 'But it may be difficult to understand which premises relate to which specific parts of the conjecture.'),
+            ]),
+            m('section', [
+                m('p', [
+                    span('Consider the words '),
+                    m('span.emphasis', 'silent'),
+                    span(' and '),
+                    m('span.emphasis', 'quiet'),
+                    span(':'),
+                ]),
+                m('div.codeblock', [
+                    m('div.codeline', ccbold('he was silent for a long moment. (infinitely many primes)')),
+                    m('div.codeline', [cc('he was '), m('span.emphasis.codebold', 'silent'), cc(' for a moment.')]),
+                    m('div.codeline', [cc('it was '), m('span.emphasis.codebold', 'quiet'), cc(' for a moment.')]),
+                    m('div.codeline', cc('it was dark and cold.')),
+                    m('div.codeline', cc('there was a pause.')),
+                    m('div.codeline', ccbold('it was my turn. (square root of 2 is irrational)')),
+                ]),
+            ]),
+            m('section', [
+                m('p', 'Here, we are able to isolate those words as a change in the homotopy (which in the analogy, correspond to some part of the conjecture expression), and then understand the underlying useful premises for a proof.'),
+                m('br'),
+                m('p', 'In this example, the small change from "silent" to "quiet" (and "he" to "it") can be related to a specific movement in the premise usefulness space.')
+            ]),
+            m('section', [
+                m('p', 'Then we have a finer-grained analysis of the premise selection problem, going beyond the scale of entire expressions to specific tokens within the expressions. We can extract exactly which part of the conjecture relates to which premise.'),
+            ]),
+        ]),
+        m('section', 'Conclusion'),
+        m('section', 'In one perspective, by turning the discrete proof objects into a continuous space, we can apply concepts or vocabulary from calculus for analysis. One example is considering the rate of change of proof object across the space.'),
+        m('section', 'A grid visualization of the latent space (such as for the handwritten digits) may be even more useful for analysis with proofs, as the changes in the structure relate to thoughtful premise choice, and not intuitive motions as writing a digit.'),
+        m('section', 'Also, one previous concern with premise selection models has been the separate encoding of premises and conjectures. Here in PC-Space, we have simultaneous work with premises and conjectures.'),
+        m('section', 'One concern with this method is that multiple premises are packed into a single point in the latent space. There is no one-to-one correspondence for the model to learn.'),
+        m('section', 'Also, it has been noted that Holstep premise selection models perform evaluation of the usefulness of a premise just as well with and without knowning the conjecture. This means the premises and conjectures are in some way independent meaning the PC-Space model may not be able to learn a meaningful space.'),
+        m('section', [
+            m('p', 'Future work clearly includes the actual implementation of this visualization.'),
+            m('br'),
+            m('p', 'Also, it may be of interest to work with a different dataset, such as the Mizar Mathematical Library.'),
+        ]),
+        m('section', 'Bonus'),
+        m('section', [
+            m('section', [
+                m('p', 'For a preliminary visualization, we can plot conjectures as points where the distance between conjectures is based on the number of shared premises (which means the proofs should be similar).'),
+            ]),
+            m('section', [
+                m('p', 'Below are two plots, using the t-SNE dimensionality reduction technique. In both, the points are reduced to a 2-dimensional space, but the second plot is shown in 3 dimensions (which performs better for me when using the interactive tools such as zooming).'),
+                m('br'),
+                m('p', 'Conjecture names are displayed when hovering above points in the plot.'),
+            ]),
+            m('section', m('div', { id: 'thesis-tsne-container-2d' })),
+            m('section', m('div', { id: 'thesis-tsne-container-3d' })),
+            m('section', 'Below are two additional plots, using the PCA dimensionality reduction technique. The advantage here is the space is linear, but we lose the direct similarity between conjectures based on their shared premises, and now have positioning of conjectures based on their individual premises.'),
+            m('section', m('div', { id: 'thesis-pca-container-2d' })),
+            m('section', m('div', { id: 'thesis-pca-container-3d' })),
+        ]),
         m('section', 'Thank you!'),
         m('section', [
             m('section', 'References, from my paper:'),
@@ -486,15 +682,21 @@ Thesis.oncreate = function () {
         ]
     });
     Reveal.addEventListener('slidechanged', function (event) {
-        if (event.indexh === 1 || false) {
-            if (event.indexv === 0) {
+        if (event.indexh === 36) {
+            if (event.indexv === 2) {
                 Thesis.buildTsnePlot('thesis-tsne-container-2d', 'https://tlacasse.github.io/build/data/thesis/tsne.json', 2, 2);
-            } else {
+            } else if (event.indexv === 3) {
                 Thesis.buildTsnePlot('thesis-tsne-container-3d', 'https://tlacasse.github.io/build/data/thesis/tsne.json', 3, 2);
-            }
+            }else if (event.indexv === 5) {
+               Thesis.buildTsnePlot('thesis-pca-container-2d', 'https://tlacasse.github.io/build/data/thesis/pca.json', 2, 2);
+            } else if (event.indexv === 6) {
+                Thesis.buildTsnePlot('thesis-pca-container-3d', 'https://tlacasse.github.io/build/data/thesis/pca.json', 3, 2);
+           }
         } else {
             Plotly.purge('thesis-tsne-container-2d');
             Plotly.purge('thesis-tsne-container-3d');
+            Plotly.purge('thesis-pca-container-2d');
+            Plotly.purge('thesis-pca-container-3d');
         }
     });
 }
